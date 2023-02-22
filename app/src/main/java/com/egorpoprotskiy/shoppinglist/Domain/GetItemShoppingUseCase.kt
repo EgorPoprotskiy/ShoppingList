@@ -1,7 +1,8 @@
 package com.egorpoprotskiy.shoppinglist.Domain
 
+//1 Добавление Domain-слоя
 class GetItemShoppingUseCase(private val shoppingRepository: ShoppingRepository) {
-    fun getItemShopping(listShopingId: Int): ListShopping {
-        return shoppingRepository.getItemShopping(listShopingId)
+    fun getItemShopping(listShopping: Int): ListShopping {
+        return shoppingRepository.getItemShopping(listShopping)
     }
 }

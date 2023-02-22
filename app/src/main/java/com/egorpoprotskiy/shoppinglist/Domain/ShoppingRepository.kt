@@ -7,7 +7,7 @@ interface ShoppingRepository {
 
     fun editItemShopping(listShopping: ListShopping)
 
-    fun getItemShopping(listShopingId: Int): ListShopping
+    fun getItemShopping(listShoppingId: Int): ListShopping
 
     fun getListShopping(): List<ListShopping>
 }

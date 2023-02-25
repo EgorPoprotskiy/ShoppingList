@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="top">4dp</dimen>
+    <dimen name="start">8dp</dimen>
+    <dimen name="end">8dp</dimen>
+    <dimen name="bottom">4dp</dimen>
+    <dimen name="all_margin">32dp</dimen>
+    <dimen name="radius">8dp</dimen>
+    <dimen name="elevation_active">4dp</dimen>
+    <dimen name="elevation_onactive">1dp</dimen>
+    <dimen name="padding">16dp</dimen>
+</resources>

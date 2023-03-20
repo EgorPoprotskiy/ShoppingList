@@ -8,7 +8,7 @@ import com.egorpoprotskiy.shoppinglist.Domain.DeleteItemShoppingUseCase
 import com.egorpoprotskiy.shoppinglist.Domain.EditItemShoppingUseCase
 import com.egorpoprotskiy.shoppinglist.Domain.GetListShoppingUseCase
 import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
-//3. Добавление Presentation слоя
+//1.3+1.4 Добавление Presentation слоя + автообновление списка
 class MainViewModel: ViewModel() {
 
     private val repository = ShoppingRepositoryImpl
@@ -24,7 +24,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun changeValueState(listShopping: ListShopping) {
-        val newItem = listShopping.copy(value = !listShopping.value)
+        val newItem = listShopping.copy(active = !listShopping.active)
         editItemShoppingUseCase.editItemShopping(newItem)
     }
 }

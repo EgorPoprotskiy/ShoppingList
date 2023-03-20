@@ -5,18 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
 import com.egorpoprotskiy.shoppinglist.Domain.ShoppingRepository
-//2 Добавление Data-слоя
+import kotlin.random.Random
+
+//1.2 Добавление Data-слоя
 object ShoppingRepositoryImpl: ShoppingRepository {
 
-    private val listAllShopping = mutableListOf<ListShopping>()
+//    private val listAllShopping = mutableListOf<ListShopping>()
+    //сортированный список по ID
+    private val listAllShopping = sortedSetOf<ListShopping>({ o1, o2 -> o1.id.compareTo(o2.id) })
 
     private val listAllShoppingLD = MutableLiveData<List<ListShopping>>()
 
     private var autoIncrementId = 0
 
     init {
-        for (i in 0 until 10) {
-            val item = ListShopping("name $i", i, true)
+        for (i in 0 until 100) {
+            val item = ListShopping("name $i", i, Random.nextBoolean())
             addItemShopping(item)
         }
     }

@@ -1,7 +1,7 @@
 package com.egorpoprotskiy.shoppinglist.Domain
 
 import androidx.lifecycle.LiveData
-
+//1.1 Создание Domain-слоя
 interface ShoppingRepository {
     fun addItemShopping(listShopping: ListShopping)
 

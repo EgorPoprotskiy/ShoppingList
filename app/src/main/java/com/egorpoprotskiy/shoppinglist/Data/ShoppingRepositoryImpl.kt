@@ -19,7 +19,7 @@ object ShoppingRepositoryImpl: ShoppingRepository {
     private var autoIncrementId = 0
 
     init {
-        for (i in 0 until 100) {
+        for (i in 0 until 10) {
             val item = ListShopping("name $i", i, Random.nextBoolean())
             addItemShopping(item)
         }

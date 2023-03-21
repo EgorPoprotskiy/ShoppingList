@@ -12,6 +12,10 @@
         android:theme="@style/Theme.ShoppingList"
         tools:targetApi="31">
         <activity
+            android:name=".Presentation.ItemShoppingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".Presentation.MainActivity"
             android:exported="true">
             <intent-filter>

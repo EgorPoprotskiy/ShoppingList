@@ -1,5 +1,6 @@
 package com.egorpoprotskiy.shoppinglist.Presentation
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.egorpoprotskiy.shoppinglist.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +25,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.shopList.observe(this) {
             //2.2 Отслеживание списка из RecyclerView
             listShoppingAdapter.submitList(it)
+        }
+        //кнопка добавления нового элемента
+        val buttonAddItem = findViewById<FloatingActionButton>(R.id.add_item)
+        buttonAddItem.setOnClickListener {
+            val intent = ItemShoppingActivity.newIntentAddItem(this)
+            startActivity(intent)
         }
     }
 
@@ -52,17 +60,19 @@ class MainActivity : AppCompatActivity() {
         //2.2.5.3 Вызов функции свайпа
         setupOnSwipe(recyclerViewList)
     }
-    //2.2.5.1 Добавление длительного слушателя нажатий
+    //2.2.5.1 Добавление длительного слушателя нажатий(для пометки активный или неактивный)
     private fun setupOnLongClickListener() {
         listShoppingAdapter.onItemShoppingLongClickListener = {
             viewModel.changeValueState(it)
         }
     }
 
-    //2.2.5.2 Добавление слушателя нажатий
+    //2.2.5.2 Добавление слушателя нажатий(для редактирования элемента)
     private fun setupOnClickListener() {
         listShoppingAdapter.onItemShoppingClickListener = {
-            Log.d("MainActivityQ", it.toString())
+            Log.d("MainActivity", it.toString())
+            val intent = ItemShoppingActivity.newIntentEditItem(this, it.id)
+            startActivity(intent)
         }
     }
 

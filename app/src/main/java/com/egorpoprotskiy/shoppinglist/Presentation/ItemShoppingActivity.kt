@@ -2,6 +2,7 @@ package com.egorpoprotskiy.shoppinglist.Presentation
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.parseIntent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -24,22 +25,22 @@ class ItemShoppingActivity : AppCompatActivity() {
 //    private lateinit var etCount: EditText
 //    private lateinit var buttonSave: Button
 //
-//    //3.5.4 Переменная, в которую будет сохранятся проверка(по-умолчанию - пустая строка)
-//    private var screenMode = MODE_UNKNOW
-//    //3.5.4 Переменная, которая будет хранить ID(по-усолчанию = -1)
-//    private var itemShoppingId = ListShopping.ID_NOTFOUND
+    //3.5.4 Переменная, в которую будет сохранятся проверка(по-умолчанию - пустая строка)
+    private var screenMode = MODE_UNKNOW
+    //3.5.4 Переменная, которая будет хранить ID(по-усолчанию = -1)
+    private var itemShoppingId = ListShopping.ID_NOTFOUND
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_shopping)
-//        //3.5.4 Вызов функции, проверяющей полученный интент, и получение ID
-//        parseIntent()
+        //3.5.4 Вызов функции, проверяющей полученный интент, и получение ID
+        parseIntent()
 //        //3.5.3 Инициалицация ссылки на ViewModel
 //        viewModel = ViewModelProvider(this)[ItemShoppingViewModel::class.java]
 //        //3.5.2 Инициализация переменных
 //        initViews()
 //        addTextChangeListeners()
-//        launchRightMode()
+        launchRightMode()
 //        observeViewModel()
     }
 //
@@ -90,13 +91,16 @@ class ItemShoppingActivity : AppCompatActivity() {
 //            }
 //        })
 //    }
-//    //3.5.5 Открытие нужного экрана в зависимости от полученного интента
-//    private fun launchRightMode() {
-//        when (screenMode) {
-//            MODE_EDIT -> launchEditMode()
-//            MODE_ADD -> launchAddMode()
-//        }
-//    }
+    //4.3 Открытие нужного фрагмента в зависимости от полученного значения
+    private fun launchRightMode() {
+    val fragment = when (screenMode) {
+            MODE_EDIT -> ItemShoppingFragment.newInstanceEditItem(itemShoppingId)
+            MODE_ADD -> ItemShoppingFragment.newInstanceAddItem()
+            else -> throw RuntimeException("Unknow screen mode $screenMode")
+        }
+    //4.3 Запуск фрагмента
+    supportFragmentManager.beginTransaction().add(R.id.item_shopping_container, fragment).commit()
+    }
 //
 //    //3.5.5 Октрытие экрана редактирования элемента
 //    private fun launchEditMode() {
@@ -121,28 +125,28 @@ class ItemShoppingActivity : AppCompatActivity() {
 //        }
 //    }
 //
-//    //3.5.4 Проверка, что все необходимые параметры были переданы, в противном случае будет исключение
-//    private fun parseIntent() {
-//        if (!intent.hasExtra(EXTRA_SCREEN_MODE)) {
-//            throw RuntimeException("param screen mode is absent")
-//        }
-//        // Проверка, если переданные параметры не равны ни одному из режимов MODE_ADD или MODE_EDIT
-//        val mode = intent.getStringExtra(EXTRA_SCREEN_MODE)
-//        if (mode != MODE_EDIT && mode != MODE_ADD){
-//            throw RuntimeException("Unknow screen mode $mode")
-//        }
-//        //3.5.4 Сохраняем проверку в переменную
-//        screenMode = mode
-//        //3.5.4 Проверка, если screenMode == MODE_EDIT
-//        if (screenMode == MODE_EDIT) {
-//            //если при этом НЕ содержит в себе ID, то будет исключение
-//            if (!intent.hasExtra(EXTRA_ITEM_SHOPPING_ID)) {
-//                throw java.lang.RuntimeException("Param shop item id is absent")
-//            }
-//            //получение ID из интента
-//            itemShoppingId = intent.getIntExtra(EXTRA_ITEM_SHOPPING_ID, ListShopping.ID_NOTFOUND)
-//        }
-//    }
+    //3.5.4 Проверка, что все необходимые параметры были переданы, в противном случае будет исключение
+    private fun parseIntent() {
+        if (!intent.hasExtra(EXTRA_SCREEN_MODE)) {
+            throw RuntimeException("param screen mode is absent")
+        }
+        // Проверка, если переданные параметры не равны ни одному из режимов MODE_ADD или MODE_EDIT
+        val mode = intent.getStringExtra(EXTRA_SCREEN_MODE)
+        if (mode != MODE_EDIT && mode != MODE_ADD){
+            throw RuntimeException("Unknow screen mode $mode")
+        }
+        //3.5.4 Сохраняем проверку в переменную
+        screenMode = mode
+        //3.5.4 Проверка, если screenMode == MODE_EDIT
+        if (screenMode == MODE_EDIT) {
+            //если при этом НЕ содержит в себе ID, то будет исключение
+            if (!intent.hasExtra(EXTRA_ITEM_SHOPPING_ID)) {
+                throw java.lang.RuntimeException("Param shop item id is absent")
+            }
+            //получение ID из интента
+            itemShoppingId = intent.getIntExtra(EXTRA_ITEM_SHOPPING_ID, ListShopping.ID_NOTFOUND)
+        }
+    }
 //
 //    //3.5.2 Инициализация переменных
 //    private fun initViews() {

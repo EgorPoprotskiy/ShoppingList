@@ -16,15 +16,7 @@ import com.google.android.material.textfield.TextInputLayout
 
 
 class ItemShoppingActivity : AppCompatActivity() {
-//    //3.5.3 Создание ссылки на ViewModel
-//    private lateinit var viewModel: ItemShoppingViewModel
-//    //3.5.1 Добавление ссылок на элементы из макета
-//    private lateinit var tilName: TextInputLayout
-//    private lateinit var tilCount: TextInputLayout
-//    private lateinit var etName: EditText
-//    private lateinit var etCount: EditText
-//    private lateinit var buttonSave: Button
-//
+
     //3.5.4 Переменная, в которую будет сохранятся проверка(по-умолчанию - пустая строка)
     private var screenMode = MODE_UNKNOW
     //3.5.4 Переменная, которая будет хранить ID(по-усолчанию = -1)
@@ -35,62 +27,11 @@ class ItemShoppingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_item_shopping)
         //3.5.4 Вызов функции, проверяющей полученный интент, и получение ID
         parseIntent()
-//        //3.5.3 Инициалицация ссылки на ViewModel
-//        viewModel = ViewModelProvider(this)[ItemShoppingViewModel::class.java]
-//        //3.5.2 Инициализация переменных
-//        initViews()
-//        addTextChangeListeners()
-        launchRightMode()
-//        observeViewModel()
+        if (savedInstanceState == null) {
+            launchRightMode()
+        }
     }
-//
-//    private fun observeViewModel() {
-//        //3.5.6 Ошибка в поле Count
-//        viewModel.errorInputCount.observe(this) {
-//            val message = if (it) {
-//                getString(R.string.error_input_count)
-//            } else {
-//                null
-//            }
-//            tilCount.error = message
-//        }
-//        //3.5.6 Ошибка в поле Name
-//        viewModel.errorInputName.observe(this) {
-//            val message = if (it) {
-//                getString(R.string.error_input_name)
-//            } else {
-//                null
-//            }
-//            tilName.error = message
-//        }
-//        //3.5.6 Если работа с экраном завершена
-//        viewModel.shouldCloseScreen.observe(this) {
-//            finish()
-//        }
-//    }
-//
-//    private fun addTextChangeListeners() {
-//        //3.5.6 Отслеживание поля Name, в режиме редактировния, чтобы появлялась ошибка
-//        etName.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                viewModel.resetErrorInputName()
-//            }
-//            override fun afterTextChanged(s: Editable?) {
-//            }
-//        })
-//        //3.5.6 Отслеживание поля Count, в режиме редактировния, чтобы появлялась ошибка
-//        etCount.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                viewModel.resetErrorInputCount()
-//            }
-//            override fun afterTextChanged(s: Editable?) {
-//            }
-//        })
-//    }
+
     //4.3 Открытие нужного фрагмента в зависимости от полученного значения
     private fun launchRightMode() {
     val fragment = when (screenMode) {
@@ -99,32 +40,9 @@ class ItemShoppingActivity : AppCompatActivity() {
             else -> throw RuntimeException("Unknow screen mode $screenMode")
         }
     //4.3 Запуск фрагмента
-    supportFragmentManager.beginTransaction().add(R.id.item_shopping_container, fragment).commit()
+    supportFragmentManager.beginTransaction().replace(R.id.item_shopping_container, fragment).commit()
     }
-//
-//    //3.5.5 Октрытие экрана редактирования элемента
-//    private fun launchEditMode() {
-//        //3.5.5 Получение элемента из ViewModel
-//        viewModel.getItemShopping(itemShoppingId)
-//        //3.5.5 Отслеживание и передача в элемент полей Name и Count
-//        viewModel.itemShopping.observe(this) {
-//            etName.setText(it.name)
-//            etCount.setText(it.count.toString())
-//        }
-//        //3.5.5 При нажатии кнопки "сохранить", вызывается метод редактирования объекта из ViewModel
-//        buttonSave.setOnClickListener {
-//            viewModel.editItemShopping(etName.text?.toString(), etCount.text?.toString())
-//        }
-//    }
-//    //3.5.5 Октрытие экрана добавления элемента
-//    private fun launchAddMode() {
-//        //3.5.5 При нажатии кнопки "сохранить", вызывается метод добавления объекта из ViewModel.
-//        // Поля Name и Count заполнять не надо т.к. они должны быть пустыми при добавлении нового элемента
-//        buttonSave.setOnClickListener {
-//            viewModel.addItemShopping(etName.text?.toString(), etCount.text?.toString())
-//        }
-//    }
-//
+
     //3.5.4 Проверка, что все необходимые параметры были переданы, в противном случае будет исключение
     private fun parseIntent() {
         if (!intent.hasExtra(EXTRA_SCREEN_MODE)) {
@@ -147,16 +65,7 @@ class ItemShoppingActivity : AppCompatActivity() {
             itemShoppingId = intent.getIntExtra(EXTRA_ITEM_SHOPPING_ID, ListShopping.ID_NOTFOUND)
         }
     }
-//
-//    //3.5.2 Инициализация переменных
-//    private fun initViews() {
-//        tilName = findViewById(R.id.til_name)
-//        tilCount = findViewById(R.id.til_count)
-//        etName = findViewById(R.id.et_name)
-//        etCount = findViewById(R.id.et_count)
-//        buttonSave = findViewById(R.id.save_button)
-//    }
-//
+
     companion object {
         // 3.4 Создание констант для интентов
         private const val EXTRA_SCREEN_MODE = "extra_mode"

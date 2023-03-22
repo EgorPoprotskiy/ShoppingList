@@ -1,0 +1,19 @@
+package com.egorpoprotskiy.shoppinglist.Presentation
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.egorpoprotskiy.shoppinglist.R
+
+class ItemShoppingFragment: Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_item_shopping, container, false)
+    }
+}

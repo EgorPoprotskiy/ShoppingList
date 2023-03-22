@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +17,7 @@ import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
 import com.egorpoprotskiy.shoppinglist.R
 import com.google.android.material.textfield.TextInputLayout
 
-class ItemShoppingFragment(
-    //4.2 Вставляем нужные параметры в конструктор фрагмента и делаем их val
-    //4.2 Переменная, в которую будет сохранятся проверка(по-умолчанию - пустая строка)
-    private val screenMode: String = MODE_UNKNOW,
-    //4.2 Переменная, которая будет хранить ID(по-усолчанию = -1)
-    private val itemShoppingId: Int = ListShopping.ID_NOTFOUND
-): Fragment() {
+class ItemShoppingFragment: Fragment() {
 
     //3.5.3 Создание ссылки на ViewModel
     private lateinit var viewModel: ItemShoppingViewModel
@@ -34,6 +29,16 @@ class ItemShoppingFragment(
     private lateinit var etCount: EditText
     private lateinit var buttonSave: Button
 
+    //4.2 Переменная, в которую будет сохранятся проверка(по-умолчанию - пустая строка)
+    private var screenMode: String = MODE_UNKNOW
+    //4.2 Переменная, которая будет хранить ID(по-усолчанию = -1)
+    private var itemShoppingId: Int = ListShopping.ID_NOTFOUND
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("ItemShoppingFragment", "onCreate")
+        super.onCreate(savedInstanceState)
+        parseParams()
+    }
 
     //Метод onCreateView нужен, чтобы из макета создать View
     override fun onCreateView(
@@ -47,8 +52,6 @@ class ItemShoppingFragment(
     //Метод onViewCreated вызывается когда View точно уже будет создано
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //3.5.4 Вызов функции, проверяющей полученный интент, и получение ID
-        parseParams()
         //3.5.3 Инициалицация ссылки на ViewModel
         viewModel = ViewModelProvider(this)[ItemShoppingViewModel::class.java]
         //3.5.2 Инициализация переменных
@@ -137,14 +140,27 @@ class ItemShoppingFragment(
         }
     }
 
-    //4.2 Проверка, что все необходимые параметры были переданы, в противном случае будет исключение
+    //4.4.5 Получение переданных аргументов
     private fun   parseParams() {
-        if (screenMode != MODE_EDIT && screenMode != MODE_ADD) {
-            throw RuntimeException("Param screen mode is absent")
+        val args = requireArguments()
+        if (!args.containsKey(SCREEN_MODE)) {
+            throw RuntimeException("param screen mode is absent")
         }
-        //4.2 Проверка, если screenMode == MODE_EDIT и если ID элемента не определён
-        if (screenMode == MODE_EDIT && itemShoppingId == ListShopping.ID_NOTFOUND) {
-            throw java.lang.RuntimeException("Param shop item id is absent")
+        // Проверка, если переданные параметры не равны ни одному из режимов MODE_ADD или MODE_EDIT
+        val mode = args.getString(SCREEN_MODE)
+        if (mode != MODE_EDIT && mode != MODE_ADD){
+            throw RuntimeException("Unknow screen mode $mode")
+        }
+        //3.5.4 Сохраняем проверку в переменную
+        screenMode = mode
+        //3.5.4 Проверка, если screenMode == MODE_EDIT
+        if (screenMode == MODE_EDIT) {
+            //если при этом НЕ содержит в себе ID, то будет исключение
+            if (!args.containsKey(ITEM_SHOPPING_ID)) {
+                throw java.lang.RuntimeException("Param shop item id is absent")
+            }
+            //получение ID из интента
+            itemShoppingId = args.getInt(ITEM_SHOPPING_ID, ListShopping.ID_NOTFOUND)
         }
     }
 
@@ -159,30 +175,39 @@ class ItemShoppingFragment(
 
     companion object {
         // 3.4 Создание констант для интентов
-        private const val EXTRA_SCREEN_MODE = "extra_mode"
-        private const val EXTRA_ITEM_SHOPPING_ID = "extra_item_shopping_id"
+        private const val SCREEN_MODE = "extra_mode"
+        private const val ITEM_SHOPPING_ID = "extra_item_shopping_id"
         private const val MODE_ADD = "mode_add"
         private const val MODE_EDIT = "mode_edit"
         private const val MODE_UNKNOW = ""
 
         //4.3 Фабричные и статичные методы для создания экземпляра фрагмента в активити
         fun newInstanceAddItem(): ItemShoppingFragment {
-            return ItemShoppingFragment(MODE_ADD)
-        }
+            //4.4 Передача параметров во фрагментах
+            return ItemShoppingFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SCREEN_MODE, MODE_ADD)
+                }
+            }}
         fun newInstanceEditItem(itemShoppingId: Int): ItemShoppingFragment {
-            return ItemShoppingFragment(MODE_EDIT, itemShoppingId)
+            return ItemShoppingFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SCREEN_MODE, MODE_EDIT)
+                    putInt(ITEM_SHOPPING_ID, itemShoppingId)
+                }
+            }
         }
         //3.4 Функция для вызова интента для добавления нового элемента
         fun newIntentAddItem(context: Context): Intent {
             val intent = Intent(context, ItemShoppingActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, MODE_ADD)
+            intent.putExtra(SCREEN_MODE, MODE_ADD)
             return intent
         }
         //3.4 Функция для вызова интента для редактировнаия элемента
         fun newIntentEditItem(context: Context, itemShoppingId: Int): Intent {
             val intent = Intent(context, ItemShoppingActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, MODE_EDIT)
-            intent.putExtra(EXTRA_ITEM_SHOPPING_ID, itemShoppingId)
+            intent.putExtra(SCREEN_MODE, MODE_EDIT)
+            intent.putExtra(ITEM_SHOPPING_ID, itemShoppingId)
             return intent
         }
     }

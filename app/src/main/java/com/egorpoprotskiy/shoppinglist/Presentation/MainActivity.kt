@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -15,9 +17,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     //2.2 переменная для привязки адаптера к RecyclerView
     private lateinit var listShoppingAdapter: ListShoppingAdapter
+    //4.5.7 Ссылка на контейнер в activity_main(land)
+    private var itemShoppingContainer: FragmentContainerView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //4.5.8 Привязка макета
+        itemShoppingContainer = findViewById(R.id.item_shopping_container)
         //проверка работы методов(потом будет удалена)
         //2.2 Вызов метода с REcyclerVeiw
         setupRecyclerView()
@@ -29,9 +35,22 @@ class MainActivity : AppCompatActivity() {
         //кнопка добавления нового элемента
         val buttonAddItem = findViewById<FloatingActionButton>(R.id.add_item)
         buttonAddItem.setOnClickListener {
-            val intent = ItemShoppingActivity.newIntentAddItem(this)
-            startActivity(intent)
+            if (isOnePaneMode()) {
+                val intent = ItemShoppingActivity.newIntentAddItem(this)
+                startActivity(intent)
+            } else {
+                launchFragment(ItemShoppingFragment.newInstanceAddItem())
+            }
         }
+    }
+    //4.5.9 По-умолчанию itemShoppingContainer равен 0(значит обычная ориентация), если !=0, то делаем альбомную
+    private fun isOnePaneMode(): Boolean {
+        return itemShoppingContainer == null
+    }
+    // 4.5.10 Создаем метод, который запускает этот контейнер
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction().replace(R.id.item_shopping_container, fragment).addToBackStack(null).commit()
     }
 
     //2.2 привязка адаптера к RecyclerView
@@ -70,9 +89,12 @@ class MainActivity : AppCompatActivity() {
     //2.2.5.2 Добавление слушателя нажатий(для редактирования элемента)
     private fun setupOnClickListener() {
         listShoppingAdapter.onItemShoppingClickListener = {
-            Log.d("MainActivity", it.toString())
-            val intent = ItemShoppingActivity.newIntentEditItem(this, it.id)
-            startActivity(intent)
+            if (isOnePaneMode()) {
+                val intent = ItemShoppingActivity.newIntentEditItem(this, it.id)
+                startActivity(intent)
+            } else {
+                launchFragment(ItemShoppingFragment.newInstanceEditItem(it.id))
+            }
         }
     }
 

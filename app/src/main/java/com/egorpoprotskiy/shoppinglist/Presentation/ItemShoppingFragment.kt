@@ -79,7 +79,8 @@ class ItemShoppingFragment(
         }
         //3.5.6 Если работа с экраном завершена
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            finish()
+            //4.3 Завершение работы фрагмента
+            activity?.onBackPressed()
         }
     }
 
@@ -163,6 +164,14 @@ class ItemShoppingFragment(
         private const val MODE_ADD = "mode_add"
         private const val MODE_EDIT = "mode_edit"
         private const val MODE_UNKNOW = ""
+
+        //4.3 Фабричные и статичные методы для создания экземпляра фрагмента в активити
+        fun newInstanceAddItem(): ItemShoppingFragment {
+            return ItemShoppingFragment(MODE_ADD)
+        }
+        fun newInstanceEditItem(itemShoppingId: Int): ItemShoppingFragment {
+            return ItemShoppingFragment(MODE_EDIT, itemShoppingId)
+        }
         //3.4 Функция для вызова интента для добавления нового элемента
         fun newIntentAddItem(context: Context): Intent {
             val intent = Intent(context, ItemShoppingActivity::class.java)

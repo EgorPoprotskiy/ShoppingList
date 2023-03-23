@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
@@ -11,8 +12,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.egorpoprotskiy.shoppinglist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
-class MainActivity : AppCompatActivity() {
+//4.6.5 В активити сделать зависимость от интерфейса
+class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinishedListener {
 
     private lateinit var viewModel: MainViewModel
     //2.2 переменная для привязки адаптера к RecyclerView
@@ -43,6 +44,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    //4.6.1 Функция для взаимодействия с фрагментом
+    override fun onEditingFinished() {
+        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_LONG).show()
+        supportFragmentManager.popBackStack()
+    }
+
     //4.5.9 По-умолчанию itemShoppingContainer равен 0(значит обычная ориентация), если !=0, то делаем альбомную
     private fun isOnePaneMode(): Boolean {
         return itemShoppingContainer == null

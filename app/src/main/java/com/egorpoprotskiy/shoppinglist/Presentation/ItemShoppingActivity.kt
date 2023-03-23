@@ -14,8 +14,8 @@ import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
 import com.egorpoprotskiy.shoppinglist.R
 import com.google.android.material.textfield.TextInputLayout
 
-
-class ItemShoppingActivity : AppCompatActivity() {
+//4.6.7  В ItemShoppingActivity сделать зависимость от интерфейса
+class ItemShoppingActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinishedListener {
 
     //3.5.4 Переменная, в которую будет сохранятся проверка(по-умолчанию - пустая строка)
     private var screenMode = MODE_UNKNOW
@@ -30,6 +30,10 @@ class ItemShoppingActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             launchRightMode()
         }
+    }
+    //4.6.8  ItemShoppingActivity переопределить метод onEditingFinished()
+    override fun onEditingFinished() {
+        finish()
     }
 
     //4.3 Открытие нужного фрагмента в зависимости от полученного значения

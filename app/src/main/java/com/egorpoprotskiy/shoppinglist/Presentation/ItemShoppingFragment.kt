@@ -21,6 +21,8 @@ class ItemShoppingFragment: Fragment() {
 
     //3.5.3 Создание ссылки на ViewModel
     private lateinit var viewModel: ItemShoppingViewModel
+    //4.6.3 Создаем переменную интерфейсного типа
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
     //3.5.1 Добавление ссылок на элементы из макета
     private lateinit var tilName: TextInputLayout
@@ -34,8 +36,17 @@ class ItemShoppingFragment: Fragment() {
     //4.2 Переменная, которая будет хранить ID(по-усолчанию = -1)
     private var itemShoppingId: Int = ListShopping.ID_NOTFOUND
 
+    // 4.6.6 Переопределить метод onAttach
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener) {
+            onEditingFinishedListener = context
+        } else {
+            throw java.lang.RuntimeException("activity must implement OnEditingFinishedListener")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("ItemShoppingFragment", "onCreate")
         super.onCreate(savedInstanceState)
         parseParams()
     }
@@ -82,8 +93,8 @@ class ItemShoppingFragment: Fragment() {
         }
         //3.5.6 Если работа с экраном завершена
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            //4.3 Завершение работы фрагмента
-            activity?.onBackPressed()
+            //4.6.4 Вызваем функцию, созданную в активити
+            onEditingFinishedListener.onEditingFinished()
         }
     }
 
@@ -172,7 +183,10 @@ class ItemShoppingFragment: Fragment() {
         etCount = view.findViewById(R.id.et_count)
         buttonSave = view.findViewById(R.id.save_button)
     }
-
+    //4.6.2 Создание интерфейса для обеспечения связи между активити и фрагментом
+    interface  OnEditingFinishedListener {
+        fun onEditingFinished()
+    }
     companion object {
         // 3.4 Создание констант для интентов
         private const val SCREEN_MODE = "extra_mode"

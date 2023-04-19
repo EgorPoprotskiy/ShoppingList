@@ -1,4 +1,4 @@
-package com.egorpoprotskiy.shoppinglist.Domain
+package com.egorpoprotskiy.shoppinglist.domain
 
 //1.1 Добавление Domain-слоя
 class GetItemShoppingUseCase(private val shoppingRepository: ShoppingRepository) {

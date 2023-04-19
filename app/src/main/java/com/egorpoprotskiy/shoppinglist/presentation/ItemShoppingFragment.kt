@@ -1,21 +1,17 @@
-package com.egorpoprotskiy.shoppinglist.Presentation
+package com.egorpoprotskiy.shoppinglist.presentation
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
-import com.egorpoprotskiy.shoppinglist.R
-import com.google.android.material.textfield.TextInputLayout
+import com.egorpoprotskiy.shoppinglist.domain.ListShopping
+import com.egorpoprotskiy.shoppinglist.databinding.FragmentItemShoppingBinding
 
 class ItemShoppingFragment: Fragment() {
 
@@ -25,11 +21,17 @@ class ItemShoppingFragment: Fragment() {
     private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
     //3.5.1 Добавление ссылок на элементы из макета
-    private lateinit var tilName: TextInputLayout
-    private lateinit var tilCount: TextInputLayout
-    private lateinit var etName: EditText
-    private lateinit var etCount: EditText
-    private lateinit var buttonSave: Button
+    //6.2.3 Присвоить значение в onCreateView. После этого удалить все view-объекты и их инииализацию
+//    private lateinit var tilName: TextInputLayout
+//    private lateinit var tilCount: TextInputLayout
+//    private lateinit var etName: EditText
+//    private lateinit var etCount: EditText
+//    private lateinit var buttonSave: Button
+
+    //6.2.2 Добавить binding. Объявление binding в фрагментах отличается. Он должен быть null.
+    private var _binding: FragmentItemShoppingBinding? = null
+    private val binding: FragmentItemShoppingBinding
+        get() = _binding ?: throw RuntimeException("FragmentItemShoppingBinding == null")
 
     //4.2 Переменная, в которую будет сохранятся проверка(по-умолчанию - пустая строка)
     private var screenMode: String = MODE_UNKNOW
@@ -57,7 +59,9 @@ class ItemShoppingFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_item_shopping, container, false)
+        //6.2.3 Присвоить значение в onCreateView. После этого удалить все view-объекты и их инииализацию
+        _binding = FragmentItemShoppingBinding.inflate(inflater, container, false)
+        return  binding.root
     }
 
     //Метод onViewCreated вызывается когда View точно уже будет создано
@@ -65,8 +69,11 @@ class ItemShoppingFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //3.5.3 Инициалицация ссылки на ViewModel
         viewModel = ViewModelProvider(this)[ItemShoppingViewModel::class.java]
+        //6.2.8 Добавить отслеживание
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         //3.5.2 Инициализация переменных
-        initViews(view)
+//        initViews(view)
         addTextChangeListeners()
         launchRightMode()
         observeViewModel()
@@ -74,23 +81,24 @@ class ItemShoppingFragment: Fragment() {
 
     private fun observeViewModel() {
         //3.5.6 Ошибка в поле Count
-        viewModel.errorInputCount.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                getString(R.string.error_input_count)
-            } else {
-                null
-            }
-            tilCount.error = message
-        }
-        //3.5.6 Ошибка в поле Name
-        viewModel.errorInputName.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                getString(R.string.error_input_name)
-            } else {
-                null
-            }
-            tilName.error = message
-        }
+        //6.2.5 Перенесено в BindingAdapters
+//        viewModel.errorInputCount.observe(viewLifecycleOwner) {
+//            val message = if (it) {
+//                getString(R.string.error_input_count)
+//            } else {
+//                null
+//            }
+//            binding.tilCount.error = message
+//        }
+//        //3.5.6 Ошибка в поле Name
+//        viewModel.errorInputName.observe(viewLifecycleOwner) {
+//            val message = if (it) {
+//                getString(R.string.error_input_name)
+//            } else {
+//                null
+//            }
+//            binding.tilName.error = message
+//        }
         //3.5.6 Если работа с экраном завершена
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
             //4.6.4 Вызваем функцию, созданную в активити
@@ -100,7 +108,7 @@ class ItemShoppingFragment: Fragment() {
 
     private fun addTextChangeListeners() {
         //3.5.6 Отслеживание поля Name, в режиме редактировния, чтобы появлялась ошибка
-        etName.addTextChangedListener(object : TextWatcher {
+        binding.etName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -110,7 +118,7 @@ class ItemShoppingFragment: Fragment() {
             }
         })
         //3.5.6 Отслеживание поля Count, в режиме редактировния, чтобы появлялась ошибка
-        etCount.addTextChangedListener(object : TextWatcher {
+        binding.etCount.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -132,27 +140,28 @@ class ItemShoppingFragment: Fragment() {
     private fun launchEditMode() {
         //3.5.5 Получение элемента из ViewModel
         viewModel.getItemShopping(itemShoppingId)
-        //3.5.5 Отслеживание и передача в элемент полей Name и Count
-        viewModel.itemShopping.observe(viewLifecycleOwner) {
-            etName.setText(it.name)
-            etCount.setText(it.count.toString())
-        }
+        // 6.2.7 Добавить в макет установку текста в режиме редактирования. После этого можно удалить код из фрагмента
+//        //3.5.5 Отслеживание и передача в элемент полей Name и Count
+//        viewModel.itemShopping.observe(viewLifecycleOwner) {
+//            binding.etName.setText(it.name)
+//            binding.etCount.setText(it.count.toString())
+//        }
         //3.5.5 При нажатии кнопки "сохранить", вызывается метод редактирования объекта из ViewModel
-        buttonSave.setOnClickListener {
-            viewModel.editItemShopping(etName.text?.toString(), etCount.text?.toString())
+        binding.saveButton.setOnClickListener {
+            viewModel.editItemShopping(binding.etName.text?.toString(), binding.etCount.text?.toString())
         }
     }
     //3.5.5 Октрытие экрана добавления элемента
     private fun launchAddMode() {
         //3.5.5 При нажатии кнопки "сохранить", вызывается метод добавления объекта из ViewModel.
         // Поля Name и Count заполнять не надо т.к. они должны быть пустыми при добавлении нового элемента
-        buttonSave.setOnClickListener {
-            viewModel.addItemShopping(etName.text?.toString(), etCount.text?.toString())
+        binding.saveButton.setOnClickListener {
+            viewModel.addItemShopping(binding.etName.text?.toString(), binding.etCount.text?.toString())
         }
     }
 
     //4.4.5 Получение переданных аргументов
-    private fun   parseParams() {
+    private fun parseParams() {
         val args = requireArguments()
         if (!args.containsKey(SCREEN_MODE)) {
             throw RuntimeException("param screen mode is absent")
@@ -176,15 +185,16 @@ class ItemShoppingFragment: Fragment() {
     }
 
     //4.2.4 Инициализация переменных
-    private fun initViews(view: View) {
-        tilName = view.findViewById(R.id.til_name)
-        tilCount = view.findViewById(R.id.til_count)
-        etName = view.findViewById(R.id.et_name)
-        etCount = view.findViewById(R.id.et_count)
-        buttonSave = view.findViewById(R.id.save_button)
-    }
+//    private fun initViews(view: View) {
+    //6.2.3 Присвоить значение в onCreateView. После этого удалить все view-объекты и их инииализацию
+//        tilName = view.findViewById(R.id.til_name)
+//        tilCount = view.findViewById(R.id.til_count)
+//        etName = view.findViewById(R.id.et_name)
+//        etCount = view.findViewById(R.id.et_count)
+//        buttonSave = view.findViewById(R.id.save_button)
+//    }
     //4.6.2 Создание интерфейса для обеспечения связи между активити и фрагментом
-    interface  OnEditingFinishedListener {
+    interface OnEditingFinishedListener {
         fun onEditingFinished()
     }
     companion object {

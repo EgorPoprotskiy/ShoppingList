@@ -5,5 +5,5 @@
     android:id="@+id/item_shopping_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Presentation.ItemShoppingActivity"
+    tools:context=".presentation.ItemShoppingActivity"
     tools:layout="@layout/fragment_item_shopping" />

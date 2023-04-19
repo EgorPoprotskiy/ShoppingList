@@ -1,13 +1,13 @@
-package com.egorpoprotskiy.shoppinglist.Presentation
+package com.egorpoprotskiy.shoppinglist.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.egorpoprotskiy.shoppinglist.Data.ShoppingRepositoryImpl
-import com.egorpoprotskiy.shoppinglist.Domain.AddItemShoppingUseCase
-import com.egorpoprotskiy.shoppinglist.Domain.EditItemShoppingUseCase
-import com.egorpoprotskiy.shoppinglist.Domain.GetItemShoppingUseCase
-import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
+import com.egorpoprotskiy.shoppinglist.data.ShoppingRepositoryImpl
+import com.egorpoprotskiy.shoppinglist.domain.AddItemShoppingUseCase
+import com.egorpoprotskiy.shoppinglist.domain.EditItemShoppingUseCase
+import com.egorpoprotskiy.shoppinglist.domain.GetItemShoppingUseCase
+import com.egorpoprotskiy.shoppinglist.domain.ListShopping
 //3.2.1 Создать класс для ViewModel
 class ItemShoppingViewModel: ViewModel() {
     //3.2.2 Создание экземпляров объектов

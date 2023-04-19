@@ -1,17 +1,15 @@
-package com.egorpoprotskiy.shoppinglist.Presentation
+package com.egorpoprotskiy.shoppinglist.presentation
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.egorpoprotskiy.shoppinglist.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.egorpoprotskiy.shoppinglist.databinding.ActivityMainBinding
+
 //4.6.5 В активити сделать зависимость от интерфейса
 class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinishedListener {
 
@@ -19,12 +17,17 @@ class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinished
     //2.2 переменная для привязки адаптера к RecyclerView
     private lateinit var listShoppingAdapter: ListShoppingAdapter
     //4.5.7 Ссылка на контейнер в activity_main(land)
-    private var itemShoppingContainer: FragmentContainerView? = null
+//    private var itemShoppingContainer: FragmentContainerView? = null
+
+    //6.1.3 Добавить переменную binding
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //6.1.4 Чтобы присвоить значение переменной binging в активити
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         //4.5.8 Привязка макета
-        itemShoppingContainer = findViewById(R.id.item_shopping_container)
+//        itemShoppingContainer = findViewById(R.id.item_shopping_container)
         //проверка работы методов(потом будет удалена)
         //2.2 Вызов метода с REcyclerVeiw
         setupRecyclerView()
@@ -34,8 +37,9 @@ class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinished
             listShoppingAdapter.submitList(it)
         }
         //кнопка добавления нового элемента
-        val buttonAddItem = findViewById<FloatingActionButton>(R.id.add_item)
-        buttonAddItem.setOnClickListener {
+//        val buttonAddItem = findViewById<FloatingActionButton>(R.id.add_item)
+        //6.1.6 В MainActivity посмотреть, где используется findViewById, и заменить на bining
+        binding.addItem.setOnClickListener {
             if (isOnePaneMode()) {
                 val intent = ItemShoppingActivity.newIntentAddItem(this)
                 startActivity(intent)
@@ -52,7 +56,8 @@ class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinished
 
     //4.5.9 По-умолчанию itemShoppingContainer равен 0(значит обычная ориентация), если !=0, то делаем альбомную
     private fun isOnePaneMode(): Boolean {
-        return itemShoppingContainer == null
+        //6.1.5 Проверяем, что объект не равен null
+        return binding.itemShoppingContainer == null
     }
     // 4.5.10 Создаем метод, который запускает этот контейнер
     private fun launchFragment(fragment: Fragment) {
@@ -63,8 +68,9 @@ class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinished
     //2.2 привязка адаптера к RecyclerViewыу
     private fun setupRecyclerView() {
         //присваивание переменной id из макета
-        val recyclerViewList = findViewById<RecyclerView>(R.id.recyclerView_list)
-        with(recyclerViewList) {
+//        val recyclerViewList = findViewById<RecyclerView>(R.id.recyclerView_list)
+        //6.1.6 В MainActivity посмотреть, где используется findViewById, и заменить на bining
+        with(binding.recyclerViewList) {
             //создание экземпляра переменно из ListShoppingAdapter
             listShoppingAdapter = ListShoppingAdapter()
             //назначение переменной для RecyclerView
@@ -84,7 +90,7 @@ class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinished
         //2.2.5.2 Вызов функции слушателя нажатий
         setupOnClickListener()
         //2.2.5.3 Вызов функции свайпа
-        setupOnSwipe(recyclerViewList)
+        setupOnSwipe(binding.recyclerViewList)
     }
     //2.2.5.1 Добавление длительного слушателя нажатий(для пометки активный или неактивный)
     private fun setupOnLongClickListener() {

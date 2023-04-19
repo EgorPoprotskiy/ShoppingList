@@ -1,10 +1,9 @@
-package com.egorpoprotskiy.shoppinglist.Data
+package com.egorpoprotskiy.shoppinglist.data
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
-import com.egorpoprotskiy.shoppinglist.Domain.ShoppingRepository
+import com.egorpoprotskiy.shoppinglist.domain.ListShopping
+import com.egorpoprotskiy.shoppinglist.domain.ShoppingRepository
 import kotlin.random.Random
 
 //1.2 Добавление Data-слоя

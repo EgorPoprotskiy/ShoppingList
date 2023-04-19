@@ -1,10 +1,10 @@
-package com.egorpoprotskiy.shoppinglist.Presentation
+package com.egorpoprotskiy.shoppinglist.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
+import com.egorpoprotskiy.shoppinglist.domain.ListShopping
 import com.egorpoprotskiy.shoppinglist.R
 import com.egorpoprotskiy.shoppinglist.databinding.ItemShoppingActiveBinding
 import com.egorpoprotskiy.shoppinglist.databinding.ItemShoppingInactiveBinding
@@ -47,14 +47,13 @@ class ListShoppingAdapter: androidx.recyclerview.widget.ListAdapter<ListShopping
             onItemShoppingClickListener?.invoke(itemShopping)
         }
         //5.2.4
+        //6.3.1 Перенести в макет и изменить код
         when (binding) {
             is ItemShoppingInactiveBinding -> {
-                binding.tvName.text = itemShopping.name
-                binding.tvCount.text = itemShopping.count.toString()
+                binding.itemShopping = itemShopping
             }
             is ItemShoppingActiveBinding -> {
-                binding.tvName.text = itemShopping.name
-                binding.tvCount.text = itemShopping.count.toString()
+                binding.itemShopping = itemShopping
             }
         }
     }

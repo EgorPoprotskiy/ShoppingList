@@ -1,7 +1,7 @@
-package com.egorpoprotskiy.shoppinglist.Presentation
+package com.egorpoprotskiy.shoppinglist.presentation
 
 import androidx.recyclerview.widget.DiffUtil
-import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
+import com.egorpoprotskiy.shoppinglist.domain.ListShopping
 
 //2.2.6.1 Данный класс принимает два писка и говорит, как их сравнивать
 class ListShoppingDiffCallback(private val oldListShopping: List<ListShopping>, private val newListShopping: List<ListShopping>): DiffUtil.Callback() {

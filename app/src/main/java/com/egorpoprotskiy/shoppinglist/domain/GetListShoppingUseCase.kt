@@ -1,4 +1,4 @@
-package com.egorpoprotskiy.shoppinglist.Domain
+package com.egorpoprotskiy.shoppinglist.domain
 
 import androidx.lifecycle.LiveData
 

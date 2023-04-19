@@ -1,13 +1,11 @@
-package com.egorpoprotskiy.shoppinglist.Presentation
+package com.egorpoprotskiy.shoppinglist.presentation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.egorpoprotskiy.shoppinglist.Data.ShoppingRepositoryImpl
-import com.egorpoprotskiy.shoppinglist.Data.ShoppingRepositoryImpl.getListShopping
-import com.egorpoprotskiy.shoppinglist.Domain.DeleteItemShoppingUseCase
-import com.egorpoprotskiy.shoppinglist.Domain.EditItemShoppingUseCase
-import com.egorpoprotskiy.shoppinglist.Domain.GetListShoppingUseCase
-import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
+import com.egorpoprotskiy.shoppinglist.data.ShoppingRepositoryImpl
+import com.egorpoprotskiy.shoppinglist.domain.DeleteItemShoppingUseCase
+import com.egorpoprotskiy.shoppinglist.domain.EditItemShoppingUseCase
+import com.egorpoprotskiy.shoppinglist.domain.GetListShoppingUseCase
+import com.egorpoprotskiy.shoppinglist.domain.ListShopping
 //1.3+1.4 Добавление Presentation слоя + автообновление списка
 class MainViewModel: ViewModel() {
 

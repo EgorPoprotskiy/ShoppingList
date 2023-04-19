@@ -2,8 +2,12 @@ package com.egorpoprotskiy.shoppinglist.Presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.egorpoprotskiy.shoppinglist.Domain.ListShopping
 import com.egorpoprotskiy.shoppinglist.R
+import com.egorpoprotskiy.shoppinglist.databinding.ItemShoppingActiveBinding
+import com.egorpoprotskiy.shoppinglist.databinding.ItemShoppingInactiveBinding
 
 //2.2.2 Создание Adapter для RecyclerView
 class ListShoppingAdapter: androidx.recyclerview.widget.ListAdapter<ListShopping, ItemShoppingViewHoler>(ItemShoppingDiffCallback()) {
@@ -22,24 +26,37 @@ class ListShoppingAdapter: androidx.recyclerview.widget.ListAdapter<ListShopping
             else -> throw  java.lang.RuntimeException("Unknow view type: $viewType")
         }
         //Вставка выбранного макета
-        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-        return ItemShoppingViewHoler(view)
+//        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
+        // 5.2.2 Присваивание макета с помощью binding
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), layout, parent, false)
+        return ItemShoppingViewHoler(binding)
     }
 
     //передает текущие значения списка(полученные в классе ItemShoppingViewHoler), в данные из макета
     override fun onBindViewHolder(holder: ItemShoppingViewHoler, position: Int) {
         val itemShopping = getItem(position)
+        //5.2.3 получение объекта binding
+        val binding = holder.binding
         //2.2.5.1 Вызов функции, в которую передаем элемент в текущей позиции. invoke - для того, если функция равна null
-        holder.view.setOnLongClickListener {
+        binding.root.setOnLongClickListener {
             onItemShoppingLongClickListener?.invoke(itemShopping)
             true
         }
         //2.2.5.2 Вызов функции, в которую передаем элемент в текущей позиции. invoke - для того, если функция равна null
-        holder.view.setOnClickListener {
+        binding.root.setOnClickListener {
             onItemShoppingClickListener?.invoke(itemShopping)
         }
-        holder.tvName.text = itemShopping.name
-        holder.tvCount.text = itemShopping.count.toString()
+        //5.2.4
+        when (binding) {
+            is ItemShoppingInactiveBinding -> {
+                binding.tvName.text = itemShopping.name
+                binding.tvCount.text = itemShopping.count.toString()
+            }
+            is ItemShoppingActiveBinding -> {
+                binding.tvName.text = itemShopping.name
+                binding.tvCount.text = itemShopping.count.toString()
+            }
+        }
     }
 
     //2.2.4 Переопределение метода для viewType, который используется в onCreateViewHolder

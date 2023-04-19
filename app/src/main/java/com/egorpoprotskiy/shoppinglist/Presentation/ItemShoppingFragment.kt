@@ -217,7 +217,7 @@ class ItemShoppingFragment: Fragment() {
             intent.putExtra(SCREEN_MODE, MODE_ADD)
             return intent
         }
-        //3.4 Функция для вызова интента для редактировнаия элемента
+        //3.4 Функция для вызова интента для редактиров наия элемента
         fun newIntentEditItem(context: Context, itemShoppingId: Int): Intent {
             val intent = Intent(context, ItemShoppingActivity::class.java)
             intent.putExtra(SCREEN_MODE, MODE_EDIT)

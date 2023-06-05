@@ -26,7 +26,7 @@ class ShoppingRepositoryImpl(application: Application): ShoppingRepository {
 //        }
 //    }
 
-    override fun addItemShopping(listShopping: ListShopping) {
+    override suspend fun addItemShopping(listShopping: ListShopping) {
         //После добавления БД, меняется реализация методов
         //проверка, добавляется новый элемент или добавляется существующий элемент при редактировани.
 //        if (listShopping.id == ListShopping.ID_NOTFOUND) {
@@ -37,14 +37,14 @@ class ShoppingRepositoryImpl(application: Application): ShoppingRepository {
         listShoppingDao.addListShopping(mapper.mapEntityToDbModel(listShopping))
     }
 
-    override fun deleteItemShopping(listShopping: ListShopping) {
+    override suspend fun deleteItemShopping(listShopping: ListShopping) {
         //После добавления БД, меняется реализация методов
 //        listAllShopping.remove(listShopping)
 //        updateListShopping()
         listShoppingDao.deleteListShopping(listShopping.id)
     }
 
-    override fun editItemShopping(listShopping: ListShopping) {
+    override suspend fun editItemShopping(listShopping: ListShopping) {
         //После добавления БД, меняется реализация методов
         //при редактировании элемента, надо сначала его удалить и затем добавить новый(измененный)
 //        val oldItemId = getItemShopping(listShopping.id)
@@ -54,7 +54,7 @@ class ShoppingRepositoryImpl(application: Application): ShoppingRepository {
 
     }
 
-    override fun getItemShopping(listShoppingId: Int): ListShopping {
+    override suspend fun getItemShopping(listShoppingId: Int): ListShopping {
         //После добавления БД, меняется реализация методов
         //проверка на null, если элемент с нужным id не найден, то будет исключение
 //        return listAllShopping.find { it.id == listShoppingId} ?: throw java.lang.RuntimeException("Element with ID $listShoppingId not found")

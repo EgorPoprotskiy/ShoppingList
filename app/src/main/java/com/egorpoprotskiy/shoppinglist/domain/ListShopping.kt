@@ -9,6 +9,6 @@ data class ListShopping(
     var id: Int = ID_NOTFOUND) {
 
     companion object {
-        const val ID_NOTFOUND = -1
+        const val ID_NOTFOUND = 0
     }
 }

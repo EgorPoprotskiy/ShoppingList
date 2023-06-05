@@ -1,5 +1,7 @@
 package com.egorpoprotskiy.shoppinglist.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +11,9 @@ import com.egorpoprotskiy.shoppinglist.domain.EditItemShoppingUseCase
 import com.egorpoprotskiy.shoppinglist.domain.GetItemShoppingUseCase
 import com.egorpoprotskiy.shoppinglist.domain.ListShopping
 //3.2.1 Создать класс для ViewModel
-class ItemShoppingViewModel: ViewModel() {
+class ItemShoppingViewModel(application: Application): AndroidViewModel(application) {
     //3.2.2 Создание экземпляров объектов
-    private val reposytory = ShoppingRepositoryImpl
+    private val reposytory = ShoppingRepositoryImpl(application)
     private val getItemShoppingUseCase = GetItemShoppingUseCase(reposytory)
     private val addItemShoppingUseCase = AddItemShoppingUseCase(reposytory)
     private val editItemShoppingUseCase = EditItemShoppingUseCase(reposytory)

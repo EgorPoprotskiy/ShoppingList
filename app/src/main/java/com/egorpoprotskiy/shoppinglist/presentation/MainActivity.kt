@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), ItemShoppingFragment.OnEditingFinished
         supportFragmentManager.beginTransaction().replace(R.id.item_shopping_container, fragment).addToBackStack(null).commit()
     }
 
-    //2.2 привязка адаптера к RecyclerViewыу
+    //2.2 привязка адаптера к RecyclerView
     private fun setupRecyclerView() {
         //присваивание переменной id из макета
 //        val recyclerViewList = findViewById<RecyclerView>(R.id.recyclerView_list)

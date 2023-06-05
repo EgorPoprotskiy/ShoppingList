@@ -1,5 +1,7 @@
 package com.egorpoprotskiy.shoppinglist.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.egorpoprotskiy.shoppinglist.data.ShoppingRepositoryImpl
 import com.egorpoprotskiy.shoppinglist.domain.DeleteItemShoppingUseCase
@@ -7,9 +9,9 @@ import com.egorpoprotskiy.shoppinglist.domain.EditItemShoppingUseCase
 import com.egorpoprotskiy.shoppinglist.domain.GetListShoppingUseCase
 import com.egorpoprotskiy.shoppinglist.domain.ListShopping
 //1.3+1.4 Добавление Presentation слоя + автообновление списка
-class MainViewModel: ViewModel() {
+class MainViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository = ShoppingRepositoryImpl
+    private val repository = ShoppingRepositoryImpl(application)
 
     private val getListShoppingUseCase = GetListShoppingUseCase(repository)
     private val deleteItemShoppingUseCase = DeleteItemShoppingUseCase(repository)

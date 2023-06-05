@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.ListAdapter
 import com.egorpoprotskiy.shoppinglist.domain.ListShopping
 import com.egorpoprotskiy.shoppinglist.R
 import com.egorpoprotskiy.shoppinglist.databinding.ItemShoppingActiveBinding
 import com.egorpoprotskiy.shoppinglist.databinding.ItemShoppingInactiveBinding
 
 //2.2.2 Создание Adapter для RecyclerView
-class ListShoppingAdapter: androidx.recyclerview.widget.ListAdapter<ListShopping, ItemShoppingViewHoler>(ItemShoppingDiffCallback()) {
+class ListShoppingAdapter: ListAdapter<ListShopping, ItemShoppingViewHoler>(ItemShoppingDiffCallback()) {
 
     //2.2.5.1 Создание функции для длительного слушателя нажатий. В качестве параметра принимает ListShop и ничего не возвращает(Unit).
     var onItemShoppingLongClickListener: ((ListShopping) -> Unit)?= null
